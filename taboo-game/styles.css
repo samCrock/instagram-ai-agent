@@ -45,9 +45,10 @@ body {
   background: none;
   border: none;
   color: var(--muted);
-  font-size: 1.3rem;
-  line-height: 1;
-  padding: 8px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -96,10 +97,12 @@ h1 { font-size: 1.8rem; margin: 0 0 4px; }
   background: none;
   border: none;
   color: var(--muted);
-  font-size: 0.95rem;
-  font-weight: 600;
-  padding: 8px 4px;
-  margin-bottom: 12px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 6px 14px 6px 6px;
+  margin-bottom: 8px;
+  margin-left: -6px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -321,3 +324,29 @@ h1 { font-size: 1.8rem; margin: 0 0 4px; }
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
+
+/* Confirm dialog */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+.confirm-overlay.hidden { display: none !important; }
+.confirm-dialog {
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 24px 20px 20px;
+  max-width: 340px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.confirm-dialog p { margin: 0; color: var(--text); font-size: 1rem; line-height: 1.45; }
+.confirm-actions { display: flex; gap: 10px; }
+.confirm-actions .btn { flex: 1; width: auto; min-height: 48px; margin-top: 0; }

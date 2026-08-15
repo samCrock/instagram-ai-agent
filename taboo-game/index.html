@@ -46,8 +46,8 @@
 
   <!-- Turn start -->
   <section id="screen-turn-start" class="screen hidden">
-    <button class="back-btn" id="back-to-setup-btn" type="button">‹ <span class="back-label">Back</span></button>
-    <button class="close-btn" id="close-from-turnstart-btn" type="button" aria-label="Close">✕</button>
+    <button class="back-btn" id="back-to-setup-btn" type="button" aria-label="Back">‹</button>
+    <button class="close-btn" id="close-from-turnstart-btn" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
     <p class="eyebrow" id="turn-start-eyebrow">Up next</p>
     <h1 id="turn-start-team"></h1>
     <p class="scoreboard" id="turn-start-scores"></p>
@@ -57,8 +57,8 @@
 
   <!-- Play -->
   <section id="screen-play" class="screen hidden">
-    <button class="back-btn" id="back-to-turnstart-btn" type="button">‹ <span class="back-label">Back</span></button>
-    <button class="close-btn" id="close-from-play-btn" type="button" aria-label="Close">✕</button>
+    <button class="back-btn" id="back-to-turnstart-btn" type="button" aria-label="Back">‹</button>
+    <button class="close-btn" id="close-from-play-btn" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
     <div class="play-top">
       <span id="play-team-name" class="play-team-name"></span>
       <span id="timer" class="timer">60</span>
@@ -81,7 +81,7 @@
 
   <!-- Turn summary -->
   <section id="screen-turn-summary" class="screen hidden">
-    <button class="close-btn" id="close-from-summary-btn" type="button" aria-label="Close">✕</button>
+    <button class="close-btn" id="close-from-summary-btn" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
     <p class="eyebrow" id="summary-eyebrow">Turn over</p>
     <h1 id="summary-team"></h1>
     <div class="summary-stats">
@@ -105,13 +105,24 @@
 
   <!-- Stats -->
   <section id="screen-stats" class="screen hidden">
-    <button class="back-btn" id="back-to-gameover-btn" type="button">‹ <span class="back-label">Back</span></button>
+    <button class="back-btn" id="back-to-gameover-btn" type="button" aria-label="Back">‹</button>
     <h1 id="stats-title">Final Stats</h1>
     <div class="stats-table" id="stats-table"></div>
     <span class="label-categories" id="recap-label">Turn Recap</span>
     <div class="recap-scroll" id="recap-scroll"></div>
     <button id="stats-new-game-btn" class="btn btn-primary" type="button">New Game</button>
   </section>
+
+  <!-- Confirm dialog (custom, not window.confirm — some embedded contexts block native dialogs) -->
+  <div id="confirm-overlay" class="confirm-overlay hidden">
+    <div class="confirm-dialog">
+      <p id="confirm-message"></p>
+      <div class="confirm-actions">
+        <button id="confirm-cancel-btn" class="btn btn-ghost" type="button">Cancel</button>
+        <button id="confirm-ok-btn" class="btn btn-primary" type="button">Close Game</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 

@@ -32,6 +32,8 @@
       back: "Back",
       close: "Close",
       confirmClose: "Close this game and start over? Your progress will be lost.",
+      confirmOk: "Close Game",
+      confirmCancel: "Cancel",
       viewStats: "View Stats",
       statsTitle: "Final Stats",
       colTeam: "Team",
@@ -69,6 +71,8 @@
       back: "Indietro",
       close: "Chiudi",
       confirmClose: "Chiudere questa partita e ricominciare? I progressi verranno persi.",
+      confirmOk: "Chiudi Partita",
+      confirmCancel: "Annulla",
       viewStats: "Vedi Statistiche",
       statsTitle: "Statistiche Finali",
       colTeam: "Squadra",
@@ -100,10 +104,34 @@
     showScreen("setup");
   }
 
+  // Custom confirm dialog: some embedded/sandboxed contexts (e.g. an iframe
+  // without allow-modals) silently block window.confirm, so we don't rely on it.
+  const confirmOverlay = document.getElementById("confirm-overlay");
+  const confirmMessageEl = document.getElementById("confirm-message");
+  const confirmCancelBtn = document.getElementById("confirm-cancel-btn");
+  const confirmOkBtn = document.getElementById("confirm-ok-btn");
+  let pendingConfirmAction = null;
+
+  function showConfirm(message, onConfirm) {
+    confirmMessageEl.textContent = message;
+    pendingConfirmAction = onConfirm;
+    confirmOverlay.classList.remove("hidden");
+  }
+
+  function hideConfirm() {
+    confirmOverlay.classList.add("hidden");
+    pendingConfirmAction = null;
+  }
+
+  confirmCancelBtn.addEventListener("click", hideConfirm);
+  confirmOkBtn.addEventListener("click", () => {
+    const action = pendingConfirmAction;
+    hideConfirm();
+    if (action) action();
+  });
+
   function confirmAndReset() {
-    if (window.confirm(STRINGS[state.lang].confirmClose)) {
-      resetToSetup();
-    }
+    showConfirm(STRINGS[state.lang].confirmClose, resetToSetup);
   }
 
   function shuffle(array) {
@@ -157,8 +185,10 @@
     document.getElementById("stats-title").textContent = s.statsTitle;
     document.getElementById("stats-new-game-btn").textContent = s.newGame;
     document.getElementById("recap-label").textContent = s.recapLabel;
-    document.querySelectorAll(".back-label").forEach((el) => {
-      el.textContent = s.back;
+    document.getElementById("confirm-cancel-btn").textContent = s.confirmCancel;
+    document.getElementById("confirm-ok-btn").textContent = s.confirmOk;
+    document.querySelectorAll(".back-btn").forEach((el) => {
+      el.setAttribute("aria-label", s.back);
     });
     document.querySelectorAll(".close-btn").forEach((el) => {
       el.setAttribute("aria-label", s.close);
