@@ -31,6 +31,7 @@
       removeTeam: "Remove team",
       back: "Back",
       close: "Close",
+      confirmClose: "Close this game and start over? Your progress will be lost.",
       viewStats: "View Stats",
       statsTitle: "Final Stats",
       colTeam: "Team",
@@ -65,6 +66,7 @@
       removeTeam: "Rimuovi squadra",
       back: "Indietro",
       close: "Chiudi",
+      confirmClose: "Chiudere questa partita e ricominciare? I progressi verranno persi.",
       viewStats: "Vedi Statistiche",
       statsTitle: "Statistiche Finali",
       colTeam: "Squadra",
@@ -92,6 +94,12 @@
       state.turn = null;
     }
     showScreen("setup");
+  }
+
+  function confirmAndReset() {
+    if (window.confirm(STRINGS[state.lang].confirmClose)) {
+      resetToSetup();
+    }
   }
 
   function shuffle(array) {
@@ -309,7 +317,7 @@
 
   document.getElementById("start-turn-btn").addEventListener("click", startTurn);
   document.getElementById("back-to-setup-btn").addEventListener("click", () => showScreen("setup"));
-  document.getElementById("close-from-turnstart-btn").addEventListener("click", resetToSetup);
+  document.getElementById("close-from-turnstart-btn").addEventListener("click", confirmAndReset);
 
   // ---- Play ----
   const timerEl = document.getElementById("timer");
@@ -355,7 +363,7 @@
     }
     goToTurnStart();
   });
-  document.getElementById("close-from-play-btn").addEventListener("click", resetToSetup);
+  document.getElementById("close-from-play-btn").addEventListener("click", confirmAndReset);
 
   function updateTimerDisplay() {
     timerEl.textContent = state.turn.timeLeft;
@@ -430,7 +438,7 @@
     state.currentTeamIndex = (state.currentTeamIndex + 1) % state.teams.length;
     goToTurnStart();
   });
-  document.getElementById("close-from-summary-btn").addEventListener("click", resetToSetup);
+  document.getElementById("close-from-summary-btn").addEventListener("click", confirmAndReset);
 
   function goToGameOver(winner) {
     document.getElementById("winner-name").textContent = STRINGS[state.lang].wins(winner.name);
