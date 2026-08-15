@@ -1,0 +1,188 @@
+:root {
+  --bg: #141821;
+  --surface: #1e2330;
+  --text: #f2f4f8;
+  --muted: #8f97ab;
+  --primary: #4f7cff;
+  --correct: #2fbf71;
+  --skip: #f2a93b;
+  --buzz: #ef4444;
+  --border: #2c3242;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+#app {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+}
+
+.screen { display: flex; flex-direction: column; flex: 1; }
+.hidden { display: none !important; }
+
+h1 { font-size: 1.8rem; margin: 0 0 4px; }
+.eyebrow { color: var(--muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.08em; margin: 0; }
+.subtitle { color: var(--muted); margin: 0 0 20px; }
+.hint { color: var(--muted); font-size: 0.9rem; margin: 12px 0 32px; }
+
+.btn {
+  border: none;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 16px;
+  min-height: 56px;
+  cursor: pointer;
+  color: white;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--primary); margin-top: auto; }
+.btn-ghost { background: transparent; color: var(--primary); border: 1px solid var(--border); }
+.btn-small { min-height: 40px; padding: 8px; font-size: 0.95rem; width: fit-content; margin-bottom: 20px; }
+
+/* Setup screen */
+.field-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
+.team-input-row { display: flex; align-items: center; gap: 8px; }
+.team-input-row input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+.remove-team-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.settings-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin: 8px 0 32px;
+}
+.settings-row label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.settings-row input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.scoreboard { color: var(--muted); font-size: 0.95rem; margin: 0 0 8px; }
+
+/* Play screen */
+.play-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.play-team-name { font-weight: 700; font-size: 1.1rem; }
+.timer {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+.timer.low { color: var(--buzz); }
+
+.card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 32px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 24px;
+  min-height: 280px;
+}
+.card-word {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  word-break: break-word;
+}
+.taboo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.taboo-list li {
+  color: var(--buzz);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.play-actions { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+.play-actions-row { display: flex; gap: 12px; }
+.play-actions-row .btn { flex: 1; }
+.btn-buzz { background: var(--buzz); }
+.btn-skip { background: var(--skip); color: #241a00; }
+.btn-correct { background: var(--correct); }
+.btn-skip:disabled { opacity: 0.4; }
+
+/* Summary */
+.summary-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+.stat {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 16px 8px;
+  text-align: center;
+}
+.stat span { display: block; font-size: 1.8rem; font-weight: 800; }
+.stat label { color: var(--muted); font-size: 0.8rem; }
+.stat-correct span { color: var(--correct); }
+.stat-skip span { color: var(--skip); }
+.stat-buzz span { color: var(--buzz); }
+.turn-points { font-size: 1.1rem; font-weight: 600; margin: 0 0 20px; }
+
+#screen-game-over .btn-primary { margin-top: 20px; }

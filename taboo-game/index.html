@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#141821" />
+<title>Taboo</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- Setup -->
+  <section id="screen-setup" class="screen">
+    <h1>Taboo</h1>
+    <p class="subtitle">Pass-and-play. Set up your teams to start.</p>
+
+    <div class="field-group" id="teams-list"></div>
+    <button id="add-team-btn" class="btn btn-ghost btn-small" type="button">+ Add team</button>
+
+    <div class="settings-row">
+      <label>
+        Turn length (sec)
+        <input id="turn-length" type="number" min="10" max="180" value="60" />
+      </label>
+      <label>
+        Skips per turn
+        <input id="skip-limit" type="number" min="0" max="10" value="3" />
+      </label>
+      <label>
+        Score to win
+        <input id="target-score" type="number" min="5" max="100" value="30" />
+      </label>
+    </div>
+
+    <button id="start-game-btn" class="btn btn-primary" type="button">Start Game</button>
+  </section>
+
+  <!-- Turn start -->
+  <section id="screen-turn-start" class="screen hidden">
+    <p class="eyebrow">Up next</p>
+    <h1 id="turn-start-team"></h1>
+    <p class="scoreboard" id="turn-start-scores"></p>
+    <p class="hint">Pass the phone to this team's clue-giver.<br>Don't let the other team see the taboo words!</p>
+    <button id="start-turn-btn" class="btn btn-primary" type="button">Start Turn</button>
+  </section>
+
+  <!-- Play -->
+  <section id="screen-play" class="screen hidden">
+    <div class="play-top">
+      <span id="play-team-name" class="play-team-name"></span>
+      <span id="timer" class="timer">60</span>
+    </div>
+
+    <div class="card">
+      <div class="card-word" id="card-word">WORD</div>
+      <ul class="taboo-list" id="taboo-list"></ul>
+    </div>
+
+    <div class="play-actions">
+      <button id="buzz-btn" class="btn btn-buzz" type="button">Buzz!</button>
+      <div class="play-actions-row">
+        <button id="skip-btn" class="btn btn-skip" type="button">Skip (<span id="skip-remaining">3</span>)</button>
+        <button id="correct-btn" class="btn btn-correct" type="button">Correct ✓</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Turn summary -->
+  <section id="screen-turn-summary" class="screen hidden">
+    <p class="eyebrow">Turn over</p>
+    <h1 id="summary-team"></h1>
+    <div class="summary-stats">
+      <div class="stat stat-correct"><span id="summary-correct">0</span><label>Correct</label></div>
+      <div class="stat stat-skip"><span id="summary-skip">0</span><label>Skipped</label></div>
+      <div class="stat stat-buzz"><span id="summary-buzz">0</span><label>Taboo</label></div>
+    </div>
+    <p class="turn-points" id="summary-points"></p>
+    <p class="scoreboard" id="summary-scores"></p>
+    <button id="continue-btn" class="btn btn-primary" type="button">Continue</button>
+  </section>
+
+  <!-- Game over -->
+  <section id="screen-game-over" class="screen hidden">
+    <p class="eyebrow">Winner</p>
+    <h1 id="winner-name"></h1>
+    <p class="scoreboard" id="final-scores"></p>
+    <button id="new-game-btn" class="btn btn-primary" type="button">New Game</button>
+  </section>
+
+</div>
+
+<script src="words.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
