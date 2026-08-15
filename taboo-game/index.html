@@ -12,23 +12,28 @@
 
   <!-- Setup -->
   <section id="screen-setup" class="screen">
-    <h1>Taboo</h1>
-    <p class="subtitle">Pass-and-play. Set up your teams to start.</p>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button id="lang-en-btn" class="lang-btn" type="button">English</button>
+      <button id="lang-it-btn" class="lang-btn" type="button">Italiano</button>
+    </div>
+
+    <h1 id="setup-title">Taboo</h1>
+    <p class="subtitle" id="setup-subtitle">Pass-and-play. Set up your teams to start.</p>
 
     <div class="field-group" id="teams-list"></div>
     <button id="add-team-btn" class="btn btn-ghost btn-small" type="button">+ Add team</button>
 
     <div class="settings-row">
       <label>
-        Turn length (sec)
+        <span id="label-turn">Turn length (sec)</span>
         <input id="turn-length" type="number" min="10" max="180" value="60" />
       </label>
       <label>
-        Skips per turn
+        <span id="label-skip">Skips per turn</span>
         <input id="skip-limit" type="number" min="0" max="10" value="3" />
       </label>
       <label>
-        Score to win
+        <span id="label-win">Score to win</span>
         <input id="target-score" type="number" min="5" max="100" value="30" />
       </label>
     </div>
@@ -38,10 +43,10 @@
 
   <!-- Turn start -->
   <section id="screen-turn-start" class="screen hidden">
-    <p class="eyebrow">Up next</p>
+    <p class="eyebrow" id="turn-start-eyebrow">Up next</p>
     <h1 id="turn-start-team"></h1>
     <p class="scoreboard" id="turn-start-scores"></p>
-    <p class="hint">Pass the phone to this team's clue-giver.<br>Don't let the other team see the taboo words!</p>
+    <p class="hint" id="turn-start-hint">Pass the phone to this team's clue-giver.<br>Don't let the other team see the taboo words!</p>
     <button id="start-turn-btn" class="btn btn-primary" type="button">Start Turn</button>
   </section>
 
@@ -60,20 +65,20 @@
     <div class="play-actions">
       <button id="buzz-btn" class="btn btn-buzz" type="button">Buzz!</button>
       <div class="play-actions-row">
-        <button id="skip-btn" class="btn btn-skip" type="button">Skip (<span id="skip-remaining">3</span>)</button>
-        <button id="correct-btn" class="btn btn-correct" type="button">Correct ✓</button>
+        <button id="skip-btn" class="btn btn-skip" type="button"><span id="skip-label-text">Skip</span> (<span id="skip-remaining">3</span>)</button>
+        <button id="correct-btn" class="btn btn-correct" type="button"><span id="correct-label-text">Correct</span> ✓</button>
       </div>
     </div>
   </section>
 
   <!-- Turn summary -->
   <section id="screen-turn-summary" class="screen hidden">
-    <p class="eyebrow">Turn over</p>
+    <p class="eyebrow" id="summary-eyebrow">Turn over</p>
     <h1 id="summary-team"></h1>
     <div class="summary-stats">
-      <div class="stat stat-correct"><span id="summary-correct">0</span><label>Correct</label></div>
-      <div class="stat stat-skip"><span id="summary-skip">0</span><label>Skipped</label></div>
-      <div class="stat stat-buzz"><span id="summary-buzz">0</span><label>Taboo</label></div>
+      <div class="stat stat-correct"><span id="summary-correct">0</span><label id="stat-label-correct">Correct</label></div>
+      <div class="stat stat-skip"><span id="summary-skip">0</span><label id="stat-label-skip">Skipped</label></div>
+      <div class="stat stat-buzz"><span id="summary-buzz">0</span><label id="stat-label-buzz">Taboo</label></div>
     </div>
     <p class="turn-points" id="summary-points"></p>
     <p class="scoreboard" id="summary-scores"></p>
@@ -82,7 +87,7 @@
 
   <!-- Game over -->
   <section id="screen-game-over" class="screen hidden">
-    <p class="eyebrow">Winner</p>
+    <p class="eyebrow" id="winner-eyebrow">Winner</p>
     <h1 id="winner-name"></h1>
     <p class="scoreboard" id="final-scores"></p>
     <button id="new-game-btn" class="btn btn-primary" type="button">New Game</button>

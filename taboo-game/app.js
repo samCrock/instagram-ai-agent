@@ -1,6 +1,63 @@
 (function () {
   "use strict";
 
+  const STRINGS = {
+    en: {
+      docTitle: "Taboo",
+      title: "Taboo",
+      subtitle: "Pass-and-play. Set up your teams to start.",
+      addTeam: "+ Add team",
+      turnLabel: "Turn length (sec)",
+      skipLabel: "Skips per turn",
+      winLabel: "Score to win",
+      startGame: "Start Game",
+      upNext: "Up next",
+      turnStartHint: "Pass the phone to this team's clue-giver.<br>Don't let the other team see the taboo words!",
+      startTurn: "Start Turn",
+      buzz: "Buzz!",
+      skip: "Skip",
+      correct: "Correct",
+      turnOver: "Turn over",
+      statCorrect: "Correct",
+      statSkip: "Skipped",
+      statBuzz: "Taboo",
+      pointsThisTurn: (n) => `${n >= 0 ? "+" : ""}${n} points this turn`,
+      continue: "Continue",
+      winner: "Winner",
+      wins: (name) => `${name} wins!`,
+      newGame: "New Game",
+      teamPrefix: "Team",
+      removeTeam: "Remove team",
+    },
+    it: {
+      docTitle: "Tabù",
+      title: "Tabù",
+      subtitle: "Passa il telefono. Configura le squadre per iniziare.",
+      addTeam: "+ Aggiungi squadra",
+      turnLabel: "Durata turno (sec)",
+      skipLabel: "Salti per turno",
+      winLabel: "Punti per vincere",
+      startGame: "Inizia Partita",
+      upNext: "Prossimo turno",
+      turnStartHint: "Passa il telefono a chi darà gli indizi per questa squadra.<br>Non far vedere le parole vietate all'altra squadra!",
+      startTurn: "Inizia Turno",
+      buzz: "Errore!",
+      skip: "Salta",
+      correct: "Corretto",
+      turnOver: "Turno finito",
+      statCorrect: "Corrette",
+      statSkip: "Saltate",
+      statBuzz: "Errori",
+      pointsThisTurn: (n) => `${n >= 0 ? "+" : ""}${n} punti in questo turno`,
+      continue: "Continua",
+      winner: "Vincitore",
+      wins: (name) => `${name} vince!`,
+      newGame: "Nuova Partita",
+      teamPrefix: "Squadra",
+      removeTeam: "Rimuovi squadra",
+    },
+  };
+
   const screens = {
     setup: document.getElementById("screen-setup"),
     turnStart: document.getElementById("screen-turn-start"),
@@ -23,28 +80,90 @@
     return a;
   }
 
+  // ---- Language ----
+  const langEnBtn = document.getElementById("lang-en-btn");
+  const langItBtn = document.getElementById("lang-it-btn");
+
+  function teamDefaultName(lang, n) {
+    return `${STRINGS[lang].teamPrefix} ${n}`;
+  }
+
+  function applyLanguage(lang) {
+    state.lang = lang;
+    const s = STRINGS[lang];
+
+    document.title = s.docTitle;
+    document.getElementById("setup-title").textContent = s.title;
+    document.getElementById("setup-subtitle").textContent = s.subtitle;
+    addTeamBtn.textContent = s.addTeam;
+    document.getElementById("label-turn").textContent = s.turnLabel;
+    document.getElementById("label-skip").textContent = s.skipLabel;
+    document.getElementById("label-win").textContent = s.winLabel;
+    document.getElementById("start-game-btn").textContent = s.startGame;
+
+    document.getElementById("turn-start-eyebrow").textContent = s.upNext;
+    document.getElementById("turn-start-hint").innerHTML = s.turnStartHint;
+    document.getElementById("start-turn-btn").textContent = s.startTurn;
+
+    document.getElementById("buzz-btn").textContent = s.buzz;
+    document.getElementById("skip-label-text").textContent = s.skip;
+    document.getElementById("correct-label-text").textContent = s.correct;
+
+    document.getElementById("summary-eyebrow").textContent = s.turnOver;
+    document.getElementById("stat-label-correct").textContent = s.statCorrect;
+    document.getElementById("stat-label-skip").textContent = s.statSkip;
+    document.getElementById("stat-label-buzz").textContent = s.statBuzz;
+    document.getElementById("continue-btn").textContent = s.continue;
+
+    document.getElementById("winner-eyebrow").textContent = s.winner;
+    document.getElementById("new-game-btn").textContent = s.newGame;
+
+    langEnBtn.classList.toggle("active", lang === "en");
+    langItBtn.classList.toggle("active", lang === "it");
+
+    // Refresh team row placeholders, and values for rows still on their default name.
+    teamsListEl.querySelectorAll(".team-input-row").forEach((row, i) => {
+      const input = row.querySelector("input");
+      const n = i + 1;
+      input.placeholder = teamDefaultName(lang, n);
+      if (input.dataset.autofilled === "true") {
+        input.value = teamDefaultName(lang, n);
+      }
+    });
+  }
+
   // ---- Setup screen: dynamic team rows ----
   const teamsListEl = document.getElementById("teams-list");
   const addTeamBtn = document.getElementById("add-team-btn");
   const MAX_TEAMS = 6;
   const MIN_TEAMS = 2;
 
-  function addTeamRow(defaultName) {
+  function addTeamRow(defaultIndex) {
     const rows = teamsListEl.querySelectorAll(".team-input-row");
     if (rows.length >= MAX_TEAMS) return;
+    const n = rows.length + 1;
     const row = document.createElement("div");
     row.className = "team-input-row";
     const input = document.createElement("input");
     input.type = "text";
-    input.placeholder = "Team " + (rows.length + 1);
-    input.value = defaultName || "";
     input.maxLength = 24;
+    input.placeholder = teamDefaultName(state.lang, n);
+    if (defaultIndex) {
+      input.value = teamDefaultName(state.lang, defaultIndex);
+      input.dataset.autofilled = "true";
+    } else {
+      input.dataset.autofilled = "false";
+    }
+    input.addEventListener("input", () => {
+      input.dataset.autofilled = "false";
+    });
     row.appendChild(input);
 
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
     removeBtn.className = "remove-team-btn";
     removeBtn.textContent = "×";
+    removeBtn.setAttribute("aria-label", STRINGS[state.lang].removeTeam);
     removeBtn.addEventListener("click", () => {
       if (teamsListEl.querySelectorAll(".team-input-row").length <= MIN_TEAMS) return;
       row.remove();
@@ -54,12 +173,9 @@
     teamsListEl.appendChild(row);
   }
 
-  addTeamRow("Team 1");
-  addTeamRow("Team 2");
-  addTeamBtn.addEventListener("click", () => addTeamRow());
-
   // ---- Game state ----
   const state = {
+    lang: "en",
     teams: [], // { name, score }
     currentTeamIndex: 0,
     turnLength: 60,
@@ -70,9 +186,16 @@
     turn: null, // { timeLeft, correct, skip, buzz, skipUsed, card, timerId }
   };
 
+  addTeamRow(1);
+  addTeamRow(2);
+  addTeamBtn.addEventListener("click", () => addTeamRow());
+  langEnBtn.addEventListener("click", () => applyLanguage("en"));
+  langItBtn.addEventListener("click", () => applyLanguage("it"));
+  applyLanguage("en");
+
   function drawCard() {
     if (state.deck.length === 0) {
-      state.deck = shuffle(state.used.length ? state.used : WORDS);
+      state.deck = shuffle(state.used.length ? state.used : WORDS[state.lang]);
       state.used = [];
     }
     const card = state.deck.pop();
@@ -87,7 +210,7 @@
   document.getElementById("start-game-btn").addEventListener("click", () => {
     const nameInputs = teamsListEl.querySelectorAll(".team-input-row input");
     const teams = Array.from(nameInputs).map((input, i) => ({
-      name: input.value.trim() || `Team ${i + 1}`,
+      name: input.value.trim() || teamDefaultName(state.lang, i + 1),
       score: 0,
     }));
 
@@ -100,7 +223,7 @@
     state.turnLength = turnLength;
     state.skipLimit = skipLimit;
     state.targetScore = targetScore;
-    state.deck = shuffle(WORDS);
+    state.deck = shuffle(WORDS[state.lang]);
     state.used = [];
 
     goToTurnStart();
@@ -212,8 +335,7 @@
     document.getElementById("summary-correct").textContent = state.turn.correct;
     document.getElementById("summary-skip").textContent = state.turn.skip;
     document.getElementById("summary-buzz").textContent = state.turn.buzz;
-    document.getElementById("summary-points").textContent =
-      (points >= 0 ? "+" : "") + points + " points this turn";
+    document.getElementById("summary-points").textContent = STRINGS[state.lang].pointsThisTurn(points);
     renderScoreboard(document.getElementById("summary-scores"));
 
     showScreen("turnSummary");
@@ -230,7 +352,7 @@
   });
 
   function goToGameOver(winner) {
-    document.getElementById("winner-name").textContent = `${winner.name} wins!`;
+    document.getElementById("winner-name").textContent = STRINGS[state.lang].wins(winner.name);
     const sorted = state.teams.slice().sort((a, b) => b.score - a.score);
     document.getElementById("final-scores").textContent = sorted
       .map((t) => `${t.name}: ${t.score}`)

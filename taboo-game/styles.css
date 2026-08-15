@@ -60,6 +60,21 @@ h1 { font-size: 1.8rem; margin: 0 0 4px; }
 .btn-ghost { background: transparent; color: var(--primary); border: 1px solid var(--border); }
 .btn-small { min-height: 40px; padding: 8px; font-size: 0.95rem; width: fit-content; margin-bottom: 20px; }
 
+/* Language toggle */
+.lang-toggle { display: flex; gap: 8px; margin-bottom: 20px; }
+.lang-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.lang-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
 /* Setup screen */
 .field-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
 .team-input-row { display: flex; align-items: center; gap: 8px; }
