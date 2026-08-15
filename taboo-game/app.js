@@ -36,6 +36,8 @@
       statsTitle: "Final Stats",
       colTeam: "Team",
       colScore: "Score",
+      recapLabel: "Turn Recap",
+      turnWord: "Turn",
     },
     it: {
       docTitle: "Tabù",
@@ -71,6 +73,8 @@
       statsTitle: "Statistiche Finali",
       colTeam: "Squadra",
       colScore: "Punti",
+      recapLabel: "Riepilogo Turni",
+      turnWord: "Turno",
     },
   };
 
@@ -152,6 +156,7 @@
     document.getElementById("view-stats-btn").textContent = s.viewStats;
     document.getElementById("stats-title").textContent = s.statsTitle;
     document.getElementById("stats-new-game-btn").textContent = s.newGame;
+    document.getElementById("recap-label").textContent = s.recapLabel;
     document.querySelectorAll(".back-label").forEach((el) => {
       el.textContent = s.back;
     });
@@ -253,6 +258,7 @@
     deck: [],
     used: [],
     turn: null, // { timeLeft, correct, skip, buzz, skipUsed, card, timerId }
+    turnHistory: [], // { teamName, correct, skip, buzz, points }
   };
 
   addTeamRow(1);
@@ -297,6 +303,7 @@
     state.targetScore = targetScore;
     state.deck = shuffle(WORDS[state.lang].filter((c) => state.selectedCategories.has(c.category)));
     state.used = [];
+    state.turnHistory = [];
 
     goToTurnStart();
   });
@@ -419,6 +426,14 @@
     team.skip += state.turn.skip;
     team.buzz += state.turn.buzz;
 
+    state.turnHistory.push({
+      teamName: team.name,
+      correct: state.turn.correct,
+      skip: state.turn.skip,
+      buzz: state.turn.buzz,
+      points: points,
+    });
+
     document.getElementById("summary-team").textContent = team.name;
     document.getElementById("summary-correct").textContent = state.turn.correct;
     document.getElementById("summary-skip").textContent = state.turn.skip;
@@ -491,8 +506,51 @@
     });
   }
 
+  const recapScrollEl = document.getElementById("recap-scroll");
+
+  function renderTurnRecap() {
+    const s = STRINGS[state.lang];
+    recapScrollEl.innerHTML = "";
+
+    state.turnHistory.forEach((turn, i) => {
+      const card = document.createElement("div");
+      card.className = "recap-card";
+
+      const turnNum = document.createElement("span");
+      turnNum.className = "recap-turn-num";
+      turnNum.textContent = `${s.turnWord} ${i + 1}`;
+      card.appendChild(turnNum);
+
+      const teamName = document.createElement("span");
+      teamName.className = "recap-team";
+      teamName.textContent = turn.teamName;
+      card.appendChild(teamName);
+
+      const points = document.createElement("span");
+      points.className = "recap-points " + (turn.points > 0 ? "positive" : turn.points < 0 ? "negative" : "zero");
+      points.textContent = (turn.points >= 0 ? "+" : "") + turn.points;
+      card.appendChild(points);
+
+      const miniStats = document.createElement("div");
+      miniStats.className = "recap-mini-stats";
+      const correctSpan = document.createElement("span");
+      correctSpan.textContent = `✓ ${turn.correct}`;
+      const skipSpan = document.createElement("span");
+      skipSpan.textContent = `${s.skip} ${turn.skip}`;
+      const buzzSpan = document.createElement("span");
+      buzzSpan.textContent = `✕ ${turn.buzz}`;
+      miniStats.appendChild(correctSpan);
+      miniStats.appendChild(skipSpan);
+      miniStats.appendChild(buzzSpan);
+      card.appendChild(miniStats);
+
+      recapScrollEl.appendChild(card);
+    });
+  }
+
   document.getElementById("view-stats-btn").addEventListener("click", () => {
     renderStatsTable();
+    renderTurnRecap();
     showScreen("stats");
   });
 
