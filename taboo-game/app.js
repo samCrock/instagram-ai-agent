@@ -30,6 +30,7 @@
       teamPrefix: "Team",
       removeTeam: "Remove team",
       back: "Back",
+      close: "Close",
       viewStats: "View Stats",
       statsTitle: "Final Stats",
       colTeam: "Team",
@@ -63,6 +64,7 @@
       teamPrefix: "Squadra",
       removeTeam: "Rimuovi squadra",
       back: "Indietro",
+      close: "Chiudi",
       viewStats: "Vedi Statistiche",
       statsTitle: "Statistiche Finali",
       colTeam: "Squadra",
@@ -82,6 +84,14 @@
   function showScreen(name) {
     Object.values(screens).forEach((el) => el.classList.add("hidden"));
     screens[name].classList.remove("hidden");
+  }
+
+  function resetToSetup() {
+    if (state.turn) {
+      clearInterval(state.turn.timerId);
+      state.turn = null;
+    }
+    showScreen("setup");
   }
 
   function shuffle(array) {
@@ -136,6 +146,9 @@
     document.getElementById("stats-new-game-btn").textContent = s.newGame;
     document.querySelectorAll(".back-label").forEach((el) => {
       el.textContent = s.back;
+    });
+    document.querySelectorAll(".close-btn").forEach((el) => {
+      el.setAttribute("aria-label", s.close);
     });
 
     langEnBtn.classList.toggle("active", lang === "en");
@@ -296,6 +309,7 @@
 
   document.getElementById("start-turn-btn").addEventListener("click", startTurn);
   document.getElementById("back-to-setup-btn").addEventListener("click", () => showScreen("setup"));
+  document.getElementById("close-from-turnstart-btn").addEventListener("click", resetToSetup);
 
   // ---- Play ----
   const timerEl = document.getElementById("timer");
@@ -341,6 +355,7 @@
     }
     goToTurnStart();
   });
+  document.getElementById("close-from-play-btn").addEventListener("click", resetToSetup);
 
   function updateTimerDisplay() {
     timerEl.textContent = state.turn.timeLeft;
@@ -415,6 +430,7 @@
     state.currentTeamIndex = (state.currentTeamIndex + 1) % state.teams.length;
     goToTurnStart();
   });
+  document.getElementById("close-from-summary-btn").addEventListener("click", resetToSetup);
 
   function goToGameOver(winner) {
     document.getElementById("winner-name").textContent = STRINGS[state.lang].wins(winner.name);

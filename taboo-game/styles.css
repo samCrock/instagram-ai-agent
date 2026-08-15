@@ -35,8 +35,23 @@ body {
   flex-direction: column;
 }
 
-.screen { display: flex; flex-direction: column; flex: 1; }
+.screen { display: flex; flex-direction: column; flex: 1; position: relative; }
 .hidden { display: none !important; }
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 8px 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.close-btn:active { opacity: 0.6; }
 
 h1 { font-size: 1.8rem; margin: 0 0 4px; }
 .eyebrow { color: var(--muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.08em; margin: 0; }
