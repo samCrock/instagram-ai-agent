@@ -29,6 +29,11 @@
       newGame: "New Game",
       teamPrefix: "Team",
       removeTeam: "Remove team",
+      back: "Back",
+      viewStats: "View Stats",
+      statsTitle: "Final Stats",
+      colTeam: "Team",
+      colScore: "Score",
     },
     it: {
       docTitle: "Tabù",
@@ -57,6 +62,11 @@
       newGame: "Nuova Partita",
       teamPrefix: "Squadra",
       removeTeam: "Rimuovi squadra",
+      back: "Indietro",
+      viewStats: "Vedi Statistiche",
+      statsTitle: "Statistiche Finali",
+      colTeam: "Squadra",
+      colScore: "Punti",
     },
   };
 
@@ -66,6 +76,7 @@
     play: document.getElementById("screen-play"),
     turnSummary: document.getElementById("screen-turn-summary"),
     gameOver: document.getElementById("screen-game-over"),
+    stats: document.getElementById("screen-stats"),
   };
 
   function showScreen(name) {
@@ -120,6 +131,12 @@
     document.getElementById("winner-eyebrow").textContent = s.winner;
     document.getElementById("new-game-btn").textContent = s.newGame;
     document.getElementById("label-categories").textContent = s.categoriesLabel;
+    document.getElementById("view-stats-btn").textContent = s.viewStats;
+    document.getElementById("stats-title").textContent = s.statsTitle;
+    document.getElementById("stats-new-game-btn").textContent = s.newGame;
+    document.querySelectorAll(".back-label").forEach((el) => {
+      el.textContent = s.back;
+    });
 
     langEnBtn.classList.toggle("active", lang === "en");
     langItBtn.classList.toggle("active", lang === "it");
@@ -243,6 +260,9 @@
     const teams = Array.from(nameInputs).map((input, i) => ({
       name: input.value.trim() || teamDefaultName(state.lang, i + 1),
       score: 0,
+      correct: 0,
+      skip: 0,
+      buzz: 0,
     }));
 
     const turnLength = clampInt(document.getElementById("turn-length").value, 10, 180, 60);
@@ -275,6 +295,7 @@
   }
 
   document.getElementById("start-turn-btn").addEventListener("click", startTurn);
+  document.getElementById("back-to-setup-btn").addEventListener("click", () => showScreen("setup"));
 
   // ---- Play ----
   const timerEl = document.getElementById("timer");
@@ -312,6 +333,14 @@
 
     showScreen("play");
   }
+
+  document.getElementById("back-to-turnstart-btn").addEventListener("click", () => {
+    if (state.turn) {
+      clearInterval(state.turn.timerId);
+      state.turn = null;
+    }
+    goToTurnStart();
+  });
 
   function updateTimerDisplay() {
     timerEl.textContent = state.turn.timeLeft;
@@ -363,6 +392,9 @@
     const team = state.teams[state.currentTeamIndex];
     const points = state.turn.correct - state.turn.buzz;
     team.score += points;
+    team.correct += state.turn.correct;
+    team.skip += state.turn.skip;
+    team.buzz += state.turn.buzz;
 
     document.getElementById("summary-team").textContent = team.name;
     document.getElementById("summary-correct").textContent = state.turn.correct;
@@ -396,4 +428,50 @@
   document.getElementById("new-game-btn").addEventListener("click", () => {
     showScreen("setup");
   });
+
+  // ---- Stats ----
+  const statsTableEl = document.getElementById("stats-table");
+
+  function addStatsCell(row, text, className) {
+    const cell = document.createElement("span");
+    if (className) cell.className = className;
+    cell.textContent = text;
+    row.appendChild(cell);
+  }
+
+  function renderStatsTable() {
+    const s = STRINGS[state.lang];
+    const sorted = state.teams.slice().sort((a, b) => b.score - a.score);
+    const topScore = sorted.length ? sorted[0].score : null;
+
+    statsTableEl.innerHTML = "";
+
+    const header = document.createElement("div");
+    header.className = "stats-row header";
+    addStatsCell(header, s.colTeam);
+    addStatsCell(header, s.colScore, "stats-cell-num");
+    addStatsCell(header, "✓", "stats-cell-num");
+    addStatsCell(header, s.skip, "stats-cell-num");
+    addStatsCell(header, "✕", "stats-cell-num");
+    statsTableEl.appendChild(header);
+
+    sorted.forEach((team) => {
+      const row = document.createElement("div");
+      row.className = "stats-row" + (team.score === topScore ? " winner" : "");
+      addStatsCell(row, team.name, "stats-cell-name");
+      addStatsCell(row, team.score, "stats-cell-num");
+      addStatsCell(row, team.correct, "stats-cell-num");
+      addStatsCell(row, team.skip, "stats-cell-num");
+      addStatsCell(row, team.buzz, "stats-cell-num");
+      statsTableEl.appendChild(row);
+    });
+  }
+
+  document.getElementById("view-stats-btn").addEventListener("click", () => {
+    renderStatsTable();
+    showScreen("stats");
+  });
+
+  document.getElementById("back-to-gameover-btn").addEventListener("click", () => showScreen("gameOver"));
+  document.getElementById("stats-new-game-btn").addEventListener("click", () => showScreen("setup"));
 })();

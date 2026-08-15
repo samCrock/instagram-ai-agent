@@ -2,7 +2,7 @@
 // and 5 forbidden ("taboo") words. Index-aligned between languages: WORDS.en[i] and
 // WORDS.it[i] are the same concept.
 
-const CATEGORIES = ["food", "sports", "occasions", "objects", "nature", "people", "places", "animals", "fantasy", "activities"];
+const CATEGORIES = ["food", "sports", "occasions", "objects", "nature", "people", "places", "animals", "fantasy", "activities", "famous"];
 
 const CATEGORY_LABELS = {
   en: {
@@ -16,6 +16,7 @@ const CATEGORY_LABELS = {
     animals: "Animals",
     fantasy: "Fantasy",
     activities: "Activities",
+    famous: "Famous People",
   },
   it: {
     food: "Cibo",
@@ -28,6 +29,7 @@ const CATEGORY_LABELS = {
     animals: "Animali",
     fantasy: "Fantasia",
     activities: "Attività",
+    famous: "Personaggi Famosi",
   },
 };
 
@@ -93,6 +95,14 @@ const WORDS = {
     { word: "GARDEN", category: "places", taboo: ["Plant", "Flower", "Soil", "Grow", "Water"] },
     { word: "THUNDERSTORM", category: "nature", taboo: ["Lightning", "Rain", "Loud", "Cloud", "Sky"] },
     { word: "ARTIST", category: "people", taboo: ["Paint", "Canvas", "Brush", "Draw", "Gallery"] },
+    { word: "ALBERT EINSTEIN", category: "famous", taboo: ["Physicist", "Genius", "Relativity", "Germany", "Hair"] },
+    { word: "WILLIAM SHAKESPEARE", category: "famous", taboo: ["Playwright", "Hamlet", "England", "Sonnets", "Theatre"] },
+    { word: "LEONARDO DA VINCI", category: "famous", taboo: ["Painter", "Mona Lisa", "Inventor", "Renaissance", "Italy"] },
+    { word: "CHARLIE CHAPLIN", category: "famous", taboo: ["Actor", "Silent Film", "Comedian", "Mustache", "Cane"] },
+    { word: "CLEOPATRA", category: "famous", taboo: ["Egypt", "Queen", "Pharaoh", "Pyramid", "Nile"] },
+    { word: "MICHAEL JORDAN", category: "famous", taboo: ["Basketball", "NBA", "Chicago", "Jump", "Number 23"] },
+    { word: "MARILYN MONROE", category: "famous", taboo: ["Actress", "Blonde", "Hollywood", "Icon", "1950s"] },
+    { word: "BEETHOVEN", category: "famous", taboo: ["Composer", "Deaf", "Symphony", "Piano", "Germany"] },
   ],
   it: [
     { word: "PIZZA", category: "food", taboo: ["Italiana", "Formaggio", "Fetta", "Forno", "Napoli"] },
@@ -155,5 +165,13 @@ const WORDS = {
     { word: "GIARDINO", category: "places", taboo: ["Pianta", "Fiore", "Terra", "Crescere", "Annaffiare"] },
     { word: "TEMPORALE", category: "nature", taboo: ["Fulmine", "Pioggia", "Rumoroso", "Nuvola", "Cielo"] },
     { word: "ARTISTA", category: "people", taboo: ["Dipingere", "Tela", "Pennello", "Disegnare", "Galleria"] },
+    { word: "ALBERT EINSTEIN", category: "famous", taboo: ["Fisico", "Genio", "Relatività", "Germania", "Capelli"] },
+    { word: "WILLIAM SHAKESPEARE", category: "famous", taboo: ["Drammaturgo", "Amleto", "Inghilterra", "Sonetti", "Teatro"] },
+    { word: "LEONARDO DA VINCI", category: "famous", taboo: ["Pittore", "Gioconda", "Inventore", "Rinascimento", "Italia"] },
+    { word: "CHARLIE CHAPLIN", category: "famous", taboo: ["Attore", "Cinema Muto", "Comico", "Baffi", "Bastone"] },
+    { word: "CLEOPATRA", category: "famous", taboo: ["Egitto", "Regina", "Faraone", "Piramide", "Nilo"] },
+    { word: "MICHAEL JORDAN", category: "famous", taboo: ["Basket", "NBA", "Chicago", "Salto", "Numero 23"] },
+    { word: "MARILYN MONROE", category: "famous", taboo: ["Attrice", "Bionda", "Hollywood", "Icona", "Anni Cinquanta"] },
+    { word: "BEETHOVEN", category: "famous", taboo: ["Compositore", "Sordo", "Sinfonia", "Pianoforte", "Germania"] },
   ],
 };

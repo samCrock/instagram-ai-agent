@@ -46,6 +46,7 @@
 
   <!-- Turn start -->
   <section id="screen-turn-start" class="screen hidden">
+    <button class="back-btn" id="back-to-setup-btn" type="button">‹ <span class="back-label">Back</span></button>
     <p class="eyebrow" id="turn-start-eyebrow">Up next</p>
     <h1 id="turn-start-team"></h1>
     <p class="scoreboard" id="turn-start-scores"></p>
@@ -55,6 +56,7 @@
 
   <!-- Play -->
   <section id="screen-play" class="screen hidden">
+    <button class="back-btn" id="back-to-turnstart-btn" type="button">‹ <span class="back-label">Back</span></button>
     <div class="play-top">
       <span id="play-team-name" class="play-team-name"></span>
       <span id="timer" class="timer">60</span>
@@ -94,7 +96,16 @@
     <p class="eyebrow" id="winner-eyebrow">Winner</p>
     <h1 id="winner-name"></h1>
     <p class="scoreboard" id="final-scores"></p>
+    <button id="view-stats-btn" class="btn btn-ghost" type="button">View Stats</button>
     <button id="new-game-btn" class="btn btn-primary" type="button">New Game</button>
+  </section>
+
+  <!-- Stats -->
+  <section id="screen-stats" class="screen hidden">
+    <button class="back-btn" id="back-to-gameover-btn" type="button">‹ <span class="back-label">Back</span></button>
+    <h1 id="stats-title">Final Stats</h1>
+    <div class="stats-table" id="stats-table"></div>
+    <button id="stats-new-game-btn" class="btn btn-primary" type="button">New Game</button>
   </section>
 
 </div>
