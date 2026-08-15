@@ -10,6 +10,7 @@
       turnLabel: "Turn length (sec)",
       skipLabel: "Skips per turn",
       winLabel: "Score to win",
+      categoriesLabel: "Categories",
       startGame: "Start Game",
       upNext: "Up next",
       turnStartHint: "Pass the phone to this team's clue-giver.<br>Don't let the other team see the taboo words!",
@@ -37,6 +38,7 @@
       turnLabel: "Durata turno (sec)",
       skipLabel: "Salti per turno",
       winLabel: "Punti per vincere",
+      categoriesLabel: "Categorie",
       startGame: "Inizia Partita",
       upNext: "Prossimo turno",
       turnStartHint: "Passa il telefono a chi darà gli indizi per questa squadra.<br>Non far vedere le parole vietate all'altra squadra!",
@@ -117,6 +119,7 @@
 
     document.getElementById("winner-eyebrow").textContent = s.winner;
     document.getElementById("new-game-btn").textContent = s.newGame;
+    document.getElementById("label-categories").textContent = s.categoriesLabel;
 
     langEnBtn.classList.toggle("active", lang === "en");
     langItBtn.classList.toggle("active", lang === "it");
@@ -129,6 +132,33 @@
       if (input.dataset.autofilled === "true") {
         input.value = teamDefaultName(lang, n);
       }
+    });
+
+    renderCategoryChips();
+  }
+
+  // ---- Categories ----
+  const categoryChipsEl = document.getElementById("category-chips");
+
+  function renderCategoryChips() {
+    const labels = CATEGORY_LABELS[state.lang];
+    categoryChipsEl.innerHTML = "";
+    CATEGORIES.forEach((key) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "category-chip";
+      chip.textContent = labels[key];
+      chip.classList.toggle("active", state.selectedCategories.has(key));
+      chip.addEventListener("click", () => {
+        if (state.selectedCategories.has(key)) {
+          if (state.selectedCategories.size <= 1) return; // keep at least one category selected
+          state.selectedCategories.delete(key);
+        } else {
+          state.selectedCategories.add(key);
+        }
+        chip.classList.toggle("active", state.selectedCategories.has(key));
+      });
+      categoryChipsEl.appendChild(chip);
     });
   }
 
@@ -181,6 +211,7 @@
     turnLength: 60,
     skipLimit: 3,
     targetScore: 30,
+    selectedCategories: new Set(CATEGORIES),
     deck: [],
     used: [],
     turn: null, // { timeLeft, correct, skip, buzz, skipUsed, card, timerId }
@@ -223,7 +254,7 @@
     state.turnLength = turnLength;
     state.skipLimit = skipLimit;
     state.targetScore = targetScore;
-    state.deck = shuffle(WORDS[state.lang]);
+    state.deck = shuffle(WORDS[state.lang].filter((c) => state.selectedCategories.has(c.category)));
     state.used = [];
 
     goToTurnStart();
@@ -247,6 +278,7 @@
 
   // ---- Play ----
   const timerEl = document.getElementById("timer");
+  const cardCategoryEl = document.getElementById("card-category");
   const cardWordEl = document.getElementById("card-word");
   const tabooListEl = document.getElementById("taboo-list");
   const skipRemainingEl = document.getElementById("skip-remaining");
@@ -289,6 +321,7 @@
   function nextCard() {
     const card = drawCard();
     state.turn.card = card;
+    cardCategoryEl.textContent = CATEGORY_LABELS[state.lang][card.category];
     cardWordEl.textContent = card.word;
     tabooListEl.innerHTML = "";
     card.taboo.forEach((word) => {
